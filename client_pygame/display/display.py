@@ -2,7 +2,7 @@
 # This file is where you make the display for your game
 # Make changes and add functions as you need.
 #
-
+import os
 import pygame
 from config import *
 from common.event import *
@@ -66,7 +66,7 @@ class Display(BaseDisplay):
     control is the control object that is used to
         control the game using user input.  It may
         have data in it that influences the display.
-    engine contains all of the game information about the current
+    engine contains all of the game information about the cufrrent
         game.  This includes all of the information about all of
         the objects in the game.  This is where you find all
         of the information to display.
@@ -197,26 +197,34 @@ class Display(BaseDisplay):
         Draws walls.
         """
         rect = self.obj_to_rect(obj)
-        pygame.draw.rect(surface, self.wall_color, rect)
+        file_path = os.path.join('display', 'images', 'better rock.png')
+        image = pygame.image.load(file_path)
+        image = image.convert_alpha()
+        color = self.player_color
+        surface.blit(image, rect)
         return
 
     def paint_npc(self, surface, engine, control, obj):
         """
         Draws living NPCs.
 
-        """
-        pct = (obj.get_health() / obj.get_max_health()) * 10
-        pct = int(round(pct))
-        health = ''
-        health = health.ljust(pct, chr(156))
-        health = health.ljust(10)
-        health = '|' + health + '|'
-
-
+        """       
         if obj.is_alive():
-            color = self.npc_color
             rect = self.obj_to_rect(obj)
-            pygame.draw.rect(surface, color, rect)
+
+            pct = (obj.get_health() / obj.get_max_health()) * 10
+            pct = int(round(pct))
+            health = ''
+            health = health.ljust(pct, chr(156))
+            health = health.ljust(10)
+            health = '|' + health + '|'
+
+            file_path = os.path.join('display', 'images', 'Rabbit.png')
+            image = pygame.image.load(file_path)
+            image = image.convert_alpha()
+            color = self.player_color
+            surface.blit(image, rect)
+
         return
 
     def paint_missile(self, surface, engine, control, obj):
@@ -234,6 +242,7 @@ class Display(BaseDisplay):
         Draws living players.
         My player is my opponent are in different colors
         """
+
         pct = (obj.get_health() / obj.get_max_health()) * 10
         pct = int(round(pct))
         health = ''
@@ -246,13 +255,20 @@ class Display(BaseDisplay):
         if obj.is_alive():
             rect = self.obj_to_rect(obj)
             if obj.get_oid() == engine.get_player_oid():
+                file_path = os.path.join('display', 'images', 'Harambe.png')
+                image = pygame.image.load(file_path)
+                image = image.convert_alpha()
                 color = self.player_color
             else:
+                file_path = os.path.join('display', 'images', 'Zookeeper.png')
+                image = pygame.image.load(file_path)
+                image = image.convert_alpha() # might not be nessesary depending on OS
                 color = self.opponent_color
-            pygame.draw.rect(surface, color, rect)
+            surface.blit(image, rect)
+            # pygame.draw.rect(surface, color, rect)
 
             (x, y) = obj.get_center()
-            x = int( round(x) )
+            x = int( round(x) ) 
             y = int( round(y) )
 
             missle_range = int( round(obj.get_missile_range() ))

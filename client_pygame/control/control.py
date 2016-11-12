@@ -112,7 +112,6 @@ class Control(BaseControl):
         user input.
         """
         
-        (mouse_x, mouse_y) = mouse_position
         
         if pygame.K_UP in newkeys or pygame.K_w in newkeys:
             engine.set_player_direction(270)
@@ -131,6 +130,10 @@ class Control(BaseControl):
             engine.set_player_speed_stop()
         elif pygame.K_2 in newkeys:
             engine.set_player_speed_slow()
+        elif pygame.K_3 in newkeys:
+            engine.set_player_speed_medium()
+        elif pygame.K_4 in newkeys:
+            engine.set_player_speed_fast()
             
         if pygame.K_q in newkeys:
             engine.set_missile_range_none()
@@ -150,17 +153,105 @@ class Control(BaseControl):
         
         oid = engine.get_player_oid()
         
-        if oid > 0:
-            player = engine.get_object(oid)
-            (x1,y1) = player.get_center()
-            dx = mouse_x-x1
-            dy = mouse_y-y1
-            radians = math.atan2(dy, dx)
-            radians %= 2*math.pi
-            degrees = math.degrees(radians)
-            engine.set_missile_direction(degrees)
-            engine.set_player_direction(degrees)
+        
 
+        return
+
+        def go(self):
+            if False == hasattr(self, 'go_speed') or self.go_speed == 'slow':
+                engine.set_player_speed_slow()
+            elif self.go_speed == 'medium':
+                engine.set_player_speed_medium()
+            elif self.go_speed == 'fast':
+                engine.set_player_speed_fast()
+            else:
+                engine.set_player_speed_slow()
+
+
+        if False == hasattr(self, 'current_key'):
+            self.current_key = pygame.K_1
+       
+        
+        (mouse_x, mouse_y) = mouse_position
+        
+        if pygame.K_UP in newkeys or pygame.K_w in newkeys:
+            engine.set_player_direction(270)
+            engine.set_missile_direction(270)
+
+            if pygame.K_UP in newkeys:
+                self.current_key = pygame.K_UP
+            elif pygame.K_w in newkeys:
+                self.current_key = pygame.K_w
+            go(self)
+        elif pygame.K_DOWN in newkeys or pygame.K_s in newkeys:
+            engine.set_player_direction(90)
+            engine.set_missile_direction(90)
+
+            if pygame.K_DOWN in newkeys:
+                self.current_key = pygame.K_DOWN
+            elif pygame.K_s in newkeys:
+                self.current_key = pygame.K_s
+            go(self)
+        elif pygame.K_LEFT in newkeys or pygame.K_a in newkeys:
+            engine.set_player_direction(180)
+            engine.set_missile_direction(180)
+            self.player_image= 'Harambe.png'
+
+            if pygame.K_LEFT in newkeys:
+                self.current_key = pygame.K_LEFT
+            elif pygame.K_a in newkeys:
+                self.current_key = pygame.K_a
+            go(self)
+        elif pygame.K_RIGHT in newkeys or pygame.K_d in newkeys:
+            engine.set_player_direction(0)
+            engine.set_missile_direction(0)
+            self.player_image = 'Harambe.png'
+
+            if pygame.K_RIGHT in newkeys:
+                self.current_key = pygame.K_RIGHT
+            elif pygame.K_d in newkeys:
+                self.current_key = pygame.K_d
+            go(self)
+
+
+
+
+
+                
+        if pygame.K_SPACE in newkeys and self.player_image == 'Harambe.png':
+            engine.fire_missile()
+            self.player_image = 'Harambe.png'
+        elif pygame.K_SPACE in newkeys and self.player_image == 'Harambe.png':
+            engine.fire_missile()
+            self.player_image = 'Harambe.png'
+        elif pygame.K_SPACE in newkeys and self.player_image == '':
+            engine.fire_missile()
+            self.player_image = ''
+        elif pygame.K_SPACE in newkeys and self.player_image == '':
+            engine.fire_missile()
+            self.player_image = ''
+
+
+
+        if pygame.K_i in newkeys:
+            self.show_info = not self.show_info
+
+        if pygame.K_c in newkeys or self.seisure_mode:
+            self.background_color = (randint(0,255), randint(0,255), randint(0,255))
+        if pygame.K_z in newkeys:
+            self.seisure_mode = not self.seisure_mode
+
+        if self.current_key not in keys and self.current_key != pygame.K_1:
+            engine.set_player_speed_stop()
+
+        if pygame.K_1 in newkeys:
+            engine.set_player_speed_stop()
+        elif pygame.K_2 in newkeys:
+            engine.set_player_speed_slow()
+        elif pygame.K_3 in newkeys:
+            engine.set_player_speed_medium()
+        elif pygame.K_4 in newkeys:
+            engine.set_player_speed_fast()
         return
         
     def game_control(self, engine):
