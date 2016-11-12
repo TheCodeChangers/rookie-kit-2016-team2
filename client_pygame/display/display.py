@@ -104,6 +104,11 @@ class Display(BaseDisplay):
         self.wall_color       = (255, 255, 255)
         self.text_color       = (255, 255, 255)
         self.background_color = (25, 100, 78)
+
+        pygame.mixer.init()
+        pygame.mixer.music.load(os.path.join('display', 'music', 'bgmusic.wav'))
+        pygame.mixer.music.play(-1)
+
         return
 
     def paint_pregame(self, surface, control):
@@ -146,8 +151,10 @@ class Display(BaseDisplay):
         """
         # background
         rect = pygame.Rect(0, 0, self.width, self.height)
-        surface.fill(self.background_color, rect)
-
+        file_path = os.path.join('display', 'images', 'ldabove3-1024x760.jpg')
+        image = pygame.image.load(file_path)
+        image = image.convert_alpha()
+        surface.blit(image, rect)
         # draw each object
         objs = engine.get_objects()
         for key in objs:
@@ -242,7 +249,9 @@ class Display(BaseDisplay):
         Draws living players.
         My player is my opponent are in different colors
         """
+        health = obj.get_health() / obj.get_max_health()
 
+        
         pct = (obj.get_health() / obj.get_max_health()) * 10
         pct = int(round(pct))
         health = ''
@@ -259,6 +268,8 @@ class Display(BaseDisplay):
                 image = pygame.image.load(file_path)
                 image = image.convert_alpha()
                 color = self.player_color
+
+                
             else:
                 file_path = os.path.join('display', 'images', 'Zookeeper.png')
                 image = pygame.image.load(file_path)
