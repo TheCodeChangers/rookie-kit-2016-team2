@@ -103,7 +103,7 @@ class Display(BaseDisplay):
         self.npc_color        = (255, 255, 0)
         self.wall_color       = (255, 255, 255)
         self.text_color       = (255, 255, 255)
-        self.background_color = (0, 0, 0)
+        self.background_color = (25, 100, 78)
         return
 
     def paint_pregame(self, surface, control):
@@ -203,7 +203,16 @@ class Display(BaseDisplay):
     def paint_npc(self, surface, engine, control, obj):
         """
         Draws living NPCs.
+
         """
+        pct = (obj.get_health() / obj.get_max_health()) * 10
+        pct = int(round(pct))
+        health = ''
+        health = health.ljust(pct, chr(156))
+        health = health.ljust(10)
+        health = '|' + health + '|'
+
+
         if obj.is_alive():
             color = self.npc_color
             rect = self.obj_to_rect(obj)
@@ -225,6 +234,15 @@ class Display(BaseDisplay):
         Draws living players.
         My player is my opponent are in different colors
         """
+        pct = (obj.get_health() / obj.get_max_health()) * 10
+        pct = int(round(pct))
+        health = ''
+        health = health.ljust(pct, chr(156))
+        health = health.ljust(10)
+        health = '|' + health + '|'
+        self.draw_text_center(surface, health, (200, 0, 0),
+                              obj.get_x() + 40, obj.get_y() - self.font_size,
+                              self.font)
         if obj.is_alive():
             rect = self.obj_to_rect(obj)
             if obj.get_oid() == engine.get_player_oid():

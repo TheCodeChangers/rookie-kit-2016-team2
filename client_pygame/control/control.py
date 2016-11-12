@@ -4,6 +4,7 @@
 #
 
 import pygame
+import math
 from client.base_control import *
 
 class Control(BaseControl):
@@ -133,7 +134,7 @@ class Control(BaseControl):
             
         if pygame.K_q in newkeys:
             engine.set_missile_range_none()
-        elif pygame.K_w in newkeys:
+        elif pygame.K_p in newkeys:
             engine.set_missile_range_short()
 
         if pygame.K_a in newkeys:
@@ -146,6 +147,19 @@ class Control(BaseControl):
 
         if pygame.K_i in newkeys:
             self.show_info = not self.show_info
+        
+        oid = engine.get_player_oid()
+        
+        if oid > 0:
+            player = engine.get_object(oid)
+            (x1,y1) = player.get_center()
+            dx = mouse_x-x1
+            dy = mouse_y-y1
+            radians = math.atan2(dy, dx)
+            radians %= 2*math.pi
+            degrees = math.degrees(radians)
+            engine.set_missile_direction(degrees)
+            engine.set_player_direction(degrees)
 
         return
         
