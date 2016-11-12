@@ -4,6 +4,7 @@
 #
 import os
 import pygame
+import random
 from config import *
 from common.event import *
 from client.base_display import BaseDisplay
@@ -145,6 +146,8 @@ class Display(BaseDisplay):
         Draws the display after the game starts.
         """
         # background
+        if control.seizure:
+            self.background_color = (random.randint(0,255), random.randint(0,255), random.randint(0,255))
         rect = pygame.Rect(0, 0, self.width, self.height)
         surface.fill(self.background_color, rect)
 

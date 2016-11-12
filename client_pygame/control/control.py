@@ -77,6 +77,7 @@ class Control(BaseControl):
         BaseControl.__init__(self, width, height)
         # used to control display of individual item information
         self.show_info = False
+        self.seizure = False
         return
 
     def pregame_control(self, engine, keys, newkeys, buttons, newbuttons, mouse_position):
@@ -151,6 +152,12 @@ class Control(BaseControl):
         if pygame.K_i in newkeys:
             self.show_info = not self.show_info
         
+        if pygame.K_t in newkeys:
+            if self.seizure:
+                self.seizure = False
+            else:
+                self.seizure = True
+
         oid = engine.get_player_oid()
         
         
